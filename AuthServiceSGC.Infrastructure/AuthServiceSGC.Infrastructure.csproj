@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Database\DbContext\" />
     <Folder Include="Database\Migrations\" />
     <Folder Include="Database\Seeders\" />
-    <Folder Include="Cache\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

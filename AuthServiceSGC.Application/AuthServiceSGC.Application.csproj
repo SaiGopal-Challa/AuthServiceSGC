@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Validators\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AuthServiceSGC.Domain\AuthServiceSGC.Domain.csproj" />
     <ProjectReference Include="..\AuthServiceSGC.Infrastructure\AuthServiceSGC.Infrastructure.csproj" />
   </ItemGroup>
