@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\DbContext\" />
+    <Folder Include="Database\Migrations\" />
+    <Folder Include="Database\Seeders\" />
+    <Folder Include="Cache\" />
+    <Folder Include="Services\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuthServiceSGC.Domain\AuthServiceSGC.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
