@@ -9,12 +9,14 @@ More details on services provided:
 **Service Type 2**: Login based on UID & password + CAPTCHA. [ UI option ] 
 
 **Service Type 3**: Login based on UID & password + CAPTCHA + OTP (mobile/email/both). [ UI option ]
+  
   Sub-types:
     OTP only on mobile.
     OTP only on email.
     OTP on both email and mobile.
 
 **Service Type 4**: Login based on UID & password + OTP (mobile/email/both). [ Both API & UI option ]
+  
   Sub-types:
     OTP only on mobile.
     OTP only on email.
