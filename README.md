@@ -23,3 +23,5 @@ More details on services provided:
     OTP on both email and mobile.
 
 Using JWT to provide token, and also using same to provide session details.
+
+Built using: .Net Core, SQL, Redis, Razor pages
