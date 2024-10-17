@@ -31,6 +31,11 @@ namespace AuthServiceSGC.API
             builder.Services.AddDbContext<OracleDbContext>(options =>
                 options.UseOracle(oracleConnectionString));
 
+            // Add PostgreSQL Database configuration
+            var postgresConnectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+            builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
+                options.UseNpgsql(postgresConnectionString));
+
             // Add application services and repositories
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
