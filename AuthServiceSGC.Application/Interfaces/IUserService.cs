@@ -9,5 +9,6 @@ namespace AuthServiceSGC.Application.Interfaces
 {
     public interface IUserService
     {
+        Task<RegisterResultDto> RegisterUserAsync(UserRegisterDto userRegisterDto);
     }
 }

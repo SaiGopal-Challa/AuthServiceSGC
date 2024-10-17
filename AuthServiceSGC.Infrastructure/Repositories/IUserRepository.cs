@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AuthServiceSGC.Domain.Entities;
 using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Infrastructure.Repositories
 {
-    internal class IUserRepository
+    public interface IUserRepository
     {
+        Task AddUserAsync(User user);
     }
 }

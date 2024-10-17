@@ -1,3 +1,15 @@
+using AuthServiceSGC.Application.Interfaces;
+using AuthServiceSGC.Application.Services;
+using AuthServiceSGC.Infrastructure.Repositories;
+using AuthServiceSGC.Infrastructure.Database;
+using AuthServiceSGC.Infrastructure.Cache;
+using Microsoft.EntityFrameworkCore;
+using Oracle.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
+
 namespace AuthServiceSGC.API
 {
     public class Program
@@ -7,9 +19,23 @@ namespace AuthServiceSGC.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            // Add Redis configuration
+            var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+            builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+            builder.Services.AddSingleton<IRedisCacheProvider, RedisCacheProvider>();
+
+            // Add Oracle Database configuration
+            var oracleConnectionString = builder.Configuration.GetConnectionString("OracleConnection");
+            builder.Services.AddDbContext<OracleDbContext>(options =>
+                options.UseOracle(oracleConnectionString));
+
+            // Add application services and repositories
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -23,9 +49,7 @@ namespace AuthServiceSGC.API
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 

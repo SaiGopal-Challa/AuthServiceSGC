@@ -12,6 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.35" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.160" />
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="23.6.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AuthServiceSGC.Domain\AuthServiceSGC.Domain.csproj" />
   </ItemGroup>
 
