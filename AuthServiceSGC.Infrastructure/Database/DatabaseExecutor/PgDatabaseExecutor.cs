@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -143,6 +144,33 @@ namespace AuthServiceSGC.Infrastructure.Database.DatabaseExecutor
         {
             var properties = GetCachedProperties(typeof(TRequest));
             return properties.FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)))?.Name;
+        }
+
+        //building for stored procedure execution
+        // use transactions(commits & rollbacks) , request & response parameters binder , also see if to use auto mapper
+        public async Task<TResponse> ExecuteSpAsync<TRequest, TResponse>(string spName, TRequest requestModel, TResponse responseModel, string dbConnString)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(dbConnString) )
+                {
+                    //build scope level objects within scope, also update required objects within scope
+                    try
+                    {
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return default;
         }
     }
 }

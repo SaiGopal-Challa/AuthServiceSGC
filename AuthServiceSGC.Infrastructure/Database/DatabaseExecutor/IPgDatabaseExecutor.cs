@@ -11,5 +11,7 @@ namespace AuthServiceSGC.Infrastructure.Database
         Task<TResponse> InsertAsync<TRequest, TResponse>(string tableName, TRequest requestModel, string dbConnString);
         Task<TResponse> UpdateAsync<TRequest, TResponse>(string tableName, TRequest requestModel, string dbConnString);
         Task ExecuteAsync(string sql, object parameters, string dbConnString);
+
+        Task<TResponse> ExecuteSpAsync<TRequest, TResponse>(string spName, TRequest requestModel, TResponse responseModel, string dbConnString);
     }
 }
