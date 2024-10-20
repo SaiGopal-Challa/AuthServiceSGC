@@ -1,0 +1,8 @@
+[
+    {
+        "Username": "john_doe",
+        "SessionCount": 1,
+        "Token": "random_generated_token",
+        "Expiry": "2024-10-17T12:00:00Z"
+    }
+]

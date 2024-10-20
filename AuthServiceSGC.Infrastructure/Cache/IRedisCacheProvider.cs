@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using AuthServiceSGC.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Infrastructure.Cache
 {
@@ -9,5 +10,9 @@ namespace AuthServiceSGC.Infrastructure.Cache
         Task<bool> CheckUserExistsAsync(string username); // user-specific method
 
         public Task SetUserAsync(string username);
+
+        Task<bool> CheckUserExistsAsyncJson(string username);
+        public Task AddUserAsyncJson(User user);
+
     }
 }

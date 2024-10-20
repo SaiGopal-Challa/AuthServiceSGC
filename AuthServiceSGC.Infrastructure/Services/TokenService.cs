@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthServiceSGC.Application.Services
+namespace AuthServiceSGC.Infrastructure.Services
 {
-    public class AuthService
+    public class TokenService
     {
     }
 }

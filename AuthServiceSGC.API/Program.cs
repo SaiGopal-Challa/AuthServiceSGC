@@ -23,7 +23,21 @@ namespace AuthServiceSGC.API
 
             // Add Redis configuration
             var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
-            builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+            //builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                try
+                {
+                    var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection") + ",abortConnect=false";
+                    return ConnectionMultiplexer.Connect(redisConnectionString);
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as needed
+                    return null; // or handle with a Redis connection stub
+                }
+            });
+
             builder.Services.AddSingleton<IRedisCacheProvider, RedisCacheProvider>();
 
             // Add Oracle Database configuration

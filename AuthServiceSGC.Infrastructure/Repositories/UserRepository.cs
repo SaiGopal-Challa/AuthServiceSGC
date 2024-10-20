@@ -4,6 +4,7 @@ using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System.Text.Json;
 
 namespace AuthServiceSGC.Infrastructure.Repositories
 {
@@ -11,11 +12,14 @@ namespace AuthServiceSGC.Infrastructure.Repositories
     {
         private readonly string _connectionString_Oracle;
         private readonly string _connectionString;
+        private readonly string _jsonFilePath;
 
         public UserRepository(IConfiguration configuration)
         {
             _connectionString_Oracle = configuration.GetConnectionString("OracleDbConnection");
             _connectionString = configuration.GetConnectionString("PostgresConnection");
+            _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "Users.json");
+            EnsureJsonFileExists();
         }
 
         public async Task AddUserAsync(User user)
@@ -37,6 +41,21 @@ namespace AuthServiceSGC.Infrastructure.Repositories
                 await connection.ExecuteAsync(insertQuery, parameters);
             }
         }
+        public async Task AddUserAsyncJson(User user)
+        {
+            var users = await GetAllUsersAsyncJson();
+            users.Add(user);
+
+            // Serialize the updated list and overwrite the file
+            var jsonData = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(_jsonFilePath, jsonData);
+        }
+
+        private async Task<List<User>> GetAllUsersAsyncJson()
+        {
+            var jsonData = await File.ReadAllTextAsync(_jsonFilePath);
+            return JsonSerializer.Deserialize<List<User>>(jsonData) ?? new List<User>();
+        }
 
         public async Task AddUserAsync_Oracle(User user)
         {
@@ -52,6 +71,16 @@ namespace AuthServiceSGC.Infrastructure.Repositories
                 parameters.Add("PhoneNumber", user.PhoneNumber);
 
                 await connection.ExecuteAsync(insertQuery, parameters);
+            }
+        }
+
+        // Ensure the Users.json file exists, if not, create it
+        private void EnsureJsonFileExists()
+        {
+            if (!File.Exists(_jsonFilePath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(_jsonFilePath));
+                File.WriteAllText(_jsonFilePath, "[]"); // Initialize with empty array
             }
         }
     }

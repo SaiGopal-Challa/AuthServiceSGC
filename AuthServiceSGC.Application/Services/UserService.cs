@@ -11,9 +11,9 @@ namespace AuthServiceSGC.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly RedisCacheProvider _redisCacheProvider;
+        private readonly IRedisCacheProvider _redisCacheProvider;
 
-        public UserService(IUserRepository userRepository, RedisCacheProvider redisCacheProvider)
+        public UserService(IUserRepository userRepository, IRedisCacheProvider redisCacheProvider)
         {
             _userRepository = userRepository;
             _redisCacheProvider = redisCacheProvider;
@@ -22,8 +22,13 @@ namespace AuthServiceSGC.Application.Services
         public async Task<RegisterResultDto> RegisterUserAsync(UserRegisterDto userRegisterDto)
         {
             // Check if user already exists in Redis
-            bool userExistsInCache = await _redisCacheProvider.CheckUserExistsAsync(userRegisterDto.Username);
-            if (userExistsInCache)
+            //bool userExistsInCache = await _redisCacheProvider.CheckUserExistsAsync(userRegisterDto.Username);
+            
+            // Call CheckUserExistsAsyncJson to check if user exists in the JSON file
+            bool userExistsInJson = await _redisCacheProvider.CheckUserExistsAsyncJson(userRegisterDto.Username);
+
+            if (userExistsInJson)
+            //if (userExistsInCache)
             {
                 return new RegisterResultDto
                 {
@@ -44,7 +49,10 @@ namespace AuthServiceSGC.Application.Services
             await _userRepository.AddUserAsync(user);
 
             // Set user in Redis Cache
-            await _redisCacheProvider.SetUserAsync(userRegisterDto.Username);
+            //await _redisCacheProvider.SetUserAsync(userRegisterDto.Username);
+
+            // Add user to JSON file as well
+            await _redisCacheProvider.AddUserAsyncJson(user);
 
             return new RegisterResultDto
             {
