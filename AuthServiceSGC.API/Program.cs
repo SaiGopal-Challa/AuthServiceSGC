@@ -21,6 +21,9 @@ namespace AuthServiceSGC.API
             // Add services to the container.
             builder.Services.AddControllers();
 
+            // Enable Razor Pages
+            builder.Services.AddRazorPages();
+
             // Add Redis configuration
             var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
             //builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
@@ -58,6 +61,9 @@ namespace AuthServiceSGC.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -68,9 +74,27 @@ namespace AuthServiceSGC.API
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapRazorPages();
+            //if (app.Environment.IsEnvironment("UI"))
+            //{
+            //    app.MapRazorPages();  // Only map Razor Pages for UI profile
+            //}
+
+            ////if (app.Environment.IsEnvironment("API") || app.Environment.IsProduction())
+            //else
+            //{
+            //    app.MapControllers();  // Map API controllers for API or Production profile
+            //}
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
 
             app.Run();
         }

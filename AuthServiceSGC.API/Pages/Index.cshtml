@@ -1,0 +1,32 @@
+﻿@page
+@model AuthServiceSGC.API.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGC Login/Register Service</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to SGC Login/Register Service</h1>
+        </header>
+        <main>
+            <p>Choose an option to proceed:</p>
+            <div class="button-container">
+                @* <a class="btn" asp-page="/Register">Register</a> *@
+                @* <a asp-page="/Register" class="btn btn-primary">Register</a> *@
+                <a href="#" onclick="window.location.href='@Url.Page("/Register")'; return false;" class="btn btn-primary">Register</a>
+                <a href="#" onclick="window.location.href='@Url.Page("/Login")'; return false;" class="btn btn-primary">Login</a>
+
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 SGC Services. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

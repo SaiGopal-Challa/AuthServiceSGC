@@ -51,8 +51,41 @@ namespace AuthServiceSGC.Infrastructure.Cache
             await _redisDb.StringSetAsync(username, "exists", expiry: TimeSpan.FromMinutes(30)); // Expiration optional
         }
 
+        // Add the user to the JSON replica
+        public async Task AddUserAsyncJson(User user)
+        {
+            var users = await GetReplicaUsersAsync();
+            users.Add(user);
+
+            using (StreamWriter writer = new StreamWriter(_userReplicaFilePath, false))
+            {
+                string updatedJson = JsonConvert.SerializeObject(users, Newtonsoft.Json.Formatting.Indented);
+                await writer.WriteAsync(updatedJson);
+            }
+        }
 
         // Check if the user exists in the JSON replica
+        public async Task<bool> CheckUserExistsAsyncJson(string username)
+        {
+            var users = await GetReplicaUsersAsync();
+            return users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Helper method to read the JSON file
+        private async Task<List<User>> GetReplicaUsersAsync()
+        {
+            using (StreamReader reader = new StreamReader(_userReplicaFilePath))
+            {
+                string json = await reader.ReadToEndAsync();
+                return JsonConvert.DeserializeObject<List<User>>(json) ?? new List<User>();
+            }
+        }
+
+    }
+}
+
+/*
+ // Check if the user exists in the JSON replica
         public async Task<bool> CheckUserExistsAsyncJson(string username)
         {
             var users = await GetReplicaUsersAsync();
@@ -81,10 +114,7 @@ namespace AuthServiceSGC.Infrastructure.Cache
                 await writer.WriteAsync(updatedJson);
             }
         }
-    }
-}
-
-
+ */
 
 /*namespace AuthServiceSGC.Infrastructure.Cache
 {
@@ -111,3 +141,4 @@ namespace AuthServiceSGC.Infrastructure.Cache
     }
 }
 */
+

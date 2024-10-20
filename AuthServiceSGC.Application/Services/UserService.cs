@@ -46,7 +46,9 @@ namespace AuthServiceSGC.Application.Services
                 PhoneNumber = userRegisterDto.PhoneNumber
             };
 
-            await _userRepository.AddUserAsync(user);
+            await _userRepository.AddUserAsyncJson(user);
+
+            //await _userRepository.AddUserAsync(user);
 
             // Set user in Redis Cache
             //await _redisCacheProvider.SetUserAsync(userRegisterDto.Username);

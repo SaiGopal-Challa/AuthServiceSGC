@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Database\Migrations\" />
     <Folder Include="Database\Seeders\" />
-    <Folder Include="App_Data\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace AuthServiceSGC.API.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("Register")]
         public async Task<ActionResult<Models.Responses.RegisterResponse>> Register([FromBody] RegisterRequest registerRequest)
         {
             var userRegisterDto = new UserRegisterDto

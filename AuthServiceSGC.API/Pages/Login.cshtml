@@ -1,0 +1,104 @@
+﻿@page
+@using AuthServiceSGC.API.Pages
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+
+        <div id="otpSection" style="display:none;">
+            <h3>Enter OTP</h3>
+            <div class="form-group">
+                <label for="otp">OTP</label>
+                <input type="text" id="otp" name="otp" />
+            </div>
+            <button id="sendOtpButton" onclick="sendOtp()">Send OTP</button>
+            <button id="resendOtpButton" style="display:none;" disabled>Resend OTP</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').on('submit', function (event) {
+                event.preventDefault();
+
+                const username = $('#username').val();
+                const password = $('#password').val();
+
+                // login API placeholder( need to implement this)
+                $.ajax({
+                    url: '/api/login', 
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username, password }),
+                    success: function (response) {
+                        if (response.loginType === 1) {
+                            $('#otpSection').show();
+                            startOtpTimer();
+                        } else {
+                            // Need to handle other login types
+                            alert('Login successful, no OTP required.');
+                        }
+                    },
+                    error: function () {
+                        alert('Invalid username or password.');
+                    }
+                });
+            });
+        });
+
+        function sendOtp() {
+            // send OTP API placeholder ( need to implement this)
+            $.ajax({
+                url: '/api/sendOtp', 
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ username: $('#username').val() }),
+                success: function () {
+                    alert('OTP sent successfully!');
+                },
+                error: function () {
+                    alert('Error sending OTP.');
+                }
+            });
+        }
+
+        function startOtpTimer() {
+            let countdown = 60;
+            $('#resendOtpButton').show().prop('disabled', true);
+
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    $('#resendOtpButton').prop('disabled', false);
+                    $('#resendOtpButton').text('Resend OTP');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

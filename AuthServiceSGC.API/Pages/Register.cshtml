@@ -1,0 +1,74 @@
+﻿@page
+@model RegisterModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/register.css" />
+    <title>User Registration</title>
+</head>
+<body>
+    <div class="container">
+        <h2>User Registration</h2>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" name="username" placeholder="Enter your username" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Enter your password" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="Enter your email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+
+        <div id="resultMessage"></div> <!-- Place for success or error messages -->
+    </div>
+
+    <script>
+        // JavaScript to handle form submission and API call
+        document.getElementById("registerForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                email: document.getElementById("email").value,
+                phoneNumber: document.getElementById("phoneNumber").value
+            };
+
+            try {
+                const response = await fetch("/api/Register/Register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById("resultMessage").innerHTML = `<p style="color:green;">Registration successful: ${result.message}</p>`;
+                } else {
+                    document.getElementById("resultMessage").innerHTML = `<p style="color:red;">Error: ${result.message}</p>`;
+                }
+
+            } catch (error) {
+                document.getElementById("resultMessage").innerHTML = `<p style="color:red;">An error occurred: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
