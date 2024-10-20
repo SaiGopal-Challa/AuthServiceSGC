@@ -23,5 +23,7 @@ More details on services provided:
     OTP on both email and mobile.
 
 Using JWT to provide token, and also using same to provide session details.
+Using Redis to faster validations ( @conditions ). 
+Using Custom built RateLimiting to control traffic .
 
-Built using: .Net Core, SQL, Redis, Razor pages
+Built using: .Net Core, PostgreSQL, Redis, Bootstrap
