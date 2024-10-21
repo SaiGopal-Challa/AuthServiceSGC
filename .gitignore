@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AuthServiceSGC.API/wwwroot/lib
+/AuthServiceSGC.API/App_Data/RedisUserDataReplica.json
+/AuthServiceSGC.API/App_Data/*
+/AuthServiceSGC.API/App_Data/Users.json
