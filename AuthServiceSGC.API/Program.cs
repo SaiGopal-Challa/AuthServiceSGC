@@ -43,6 +43,7 @@ namespace AuthServiceSGC.API
 
             builder.Services.AddSingleton<IRedisCacheProvider, RedisCacheProvider>();
 
+
             // Add Oracle Database configuration
             var oracleConnectionString = builder.Configuration.GetConnectionString("OracleConnection");
             builder.Services.AddDbContext<OracleDbContext>(options =>
@@ -55,7 +56,9 @@ namespace AuthServiceSGC.API
 
             // Add application services and repositories
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
             // Swagger
             builder.Services.AddEndpointsApiExplorer();

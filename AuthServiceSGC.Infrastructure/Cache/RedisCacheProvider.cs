@@ -81,6 +81,15 @@ namespace AuthServiceSGC.Infrastructure.Cache
             }
         }
 
+        public async Task<User> GetUserFromRedisAsync(string username)
+        {
+            var user = await _redisDb.StringGetAsync(username);
+            if (!user.HasValue)
+                return null;
+
+            return JsonConvert.DeserializeObject<User>(user);
+        }
+
     }
 }
 

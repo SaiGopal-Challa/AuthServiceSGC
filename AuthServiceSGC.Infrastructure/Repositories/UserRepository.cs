@@ -57,6 +57,26 @@ namespace AuthServiceSGC.Infrastructure.Repositories
             return JsonSerializer.Deserialize<List<User>>(jsonData) ?? new List<User>();
         }
 
+
+
+        // Fetch user from JSON
+        public async Task<User> GetUserFromJsonAsync(string username)
+        {
+            var users = await GetAllUsersAsyncJson();
+            return users.Find(u => u.Username == username);
+        }
+
+        // Fetch user from PostgreSQL
+        public async Task<User> GetUserFromPostgresAsync(string username)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM UserTable WHERE Username = @Username";
+                return await connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
+            }
+        }
+
+
         public async Task AddUserAsync_Oracle(User user)
         {
             using (var connection = new OracleConnection(_connectionString_Oracle))

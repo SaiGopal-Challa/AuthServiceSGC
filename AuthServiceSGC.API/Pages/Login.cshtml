@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/login.css" />
     <title>@ViewData["Title"]</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -41,61 +40,74 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            $('#loginForm').on('submit', function (event) {
-                event.preventDefault();
+        document.getElementById("loginForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-                const username = $('#username').val();
-                const password = $('#password').val();
-
-                // login API placeholder( need to implement this)
-                $.ajax({
-                    url: '/api/login', 
+            try {
+                const response = await fetch('api/Auth/Login', {
                     method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ username, password }),
-                    success: function (response) {
-                        if (response.loginType === 1) {
-                            $('#otpSection').show();
-                            startOtpTimer();
-                        } else {
-                            // Need to handle other login types
-                            alert('Login successful, no OTP required.');
-                        }
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    error: function () {
-                        alert('Invalid username or password.');
-                    }
+                    body: JSON.stringify({ username, password })
                 });
-            });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.loginType === 1) {
+                        document.getElementById('otpSection').style.display = 'block';
+                        startOtpTimer();
+                    } else {
+                        alert('Login successful, no OTP required.');
+                    }
+                } else {
+                    throw new Error(result.message || 'Invalid username or password.');
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+                alert('Login failed: ' + error.message);
+            }
         });
 
         function sendOtp() {
-            // send OTP API placeholder ( need to implement this)
-            $.ajax({
-                url: '/api/sendOtp', 
+            const username = document.getElementById('username').value;
+
+            fetch('/api/sendOtp', {
                 method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ username: $('#username').val() }),
-                success: function () {
-                    alert('OTP sent successfully!');
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                error: function () {
-                    alert('Error sending OTP.');
-                }
-            });
+                body: JSON.stringify({ username })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error sending OTP.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('OTP sent successfully!');
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
+                });
         }
 
         function startOtpTimer() {
             let countdown = 60;
-            $('#resendOtpButton').show().prop('disabled', true);
+            const resendOtpButton = document.getElementById('resendOtpButton');
+            resendOtpButton.style.display = 'inline-block';
+            resendOtpButton.disabled = true;
 
             const interval = setInterval(() => {
                 countdown--;
                 if (countdown <= 0) {
                     clearInterval(interval);
-                    $('#resendOtpButton').prop('disabled', false);
-                    $('#resendOtpButton').text('Resend OTP');
+                    resendOtpButton.disabled = false;
+                    resendOtpButton.textContent = 'Resend OTP';
                 }
             }, 1000);
         }

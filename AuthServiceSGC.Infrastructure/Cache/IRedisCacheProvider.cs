@@ -14,5 +14,7 @@ namespace AuthServiceSGC.Infrastructure.Cache
         Task<bool> CheckUserExistsAsyncJson(string username);
         public Task AddUserAsyncJson(User user);
 
+        Task<User> GetUserFromRedisAsync(string username);
+
     }
 }
