@@ -1,6 +1,11 @@
-﻿namespace AuthServiceSGC.API.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace AuthServiceSGC.API.Controllers
 {
-    public class OTPController
+    [ApiController]
+    [Route("api/[Controller]")]
+    public class OTPController : ControllerBase
     {
+
     }
 }

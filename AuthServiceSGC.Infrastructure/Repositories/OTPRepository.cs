@@ -8,5 +8,10 @@ namespace AuthServiceSGC.Infrastructure.Repositories
 {
     internal class OTPRepository
     {
+        // save latest otp into redis
+
+        // save latest otp into pgsql db
+
+        // 
     }
 }

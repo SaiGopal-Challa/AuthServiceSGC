@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Application.Interfaces
 {
-    internal class IOTPService
+    public class IOTPService
     {
     }
 }
