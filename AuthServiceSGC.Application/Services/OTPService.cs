@@ -11,15 +11,12 @@ namespace AuthServiceSGC.Application.Services
     {
         public OTPService() { }
 
-        // send otp via mobile
+        // send otp via mobile, call send SMSService
 
-        // send otp via email
+        // send otp via email, call send EmailService
 
-        //call service to save the otp
+        //call OTPRepository to save the otp
 
-        //resend otp via mobile
-
-        //resend otp via email
 
     }
 }

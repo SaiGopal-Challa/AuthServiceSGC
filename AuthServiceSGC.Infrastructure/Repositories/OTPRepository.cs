@@ -12,6 +12,6 @@ namespace AuthServiceSGC.Infrastructure.Repositories
 
         // save latest otp into pgsql db
 
-        // 
+        // save latest otp into json file , current placeholder
     }
 }
