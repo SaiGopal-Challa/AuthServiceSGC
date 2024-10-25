@@ -9,7 +9,10 @@ namespace AuthServiceSGC.Application.Services
 {
     public class OTPService: IOTPService
     {
-        public OTPService() { }
+        public OTPService()
+        {
+
+        }
 
         // send otp via mobile, call send SMSService
 

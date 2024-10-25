@@ -13,7 +13,7 @@ namespace AuthServiceSGC.API.Models.Responses
         public int LoginType { get; set; }
 
         //[HiddenInput]
-        public string? SessionID { get; set; }
+        public string? SessionId { get; set; }
         [HiddenInput]
         public string? PreferredName { get; set; }
     }
