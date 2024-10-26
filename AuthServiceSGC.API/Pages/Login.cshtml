@@ -75,7 +75,7 @@
         function sendOtp() {
             const username = document.getElementById('username').value;
 
-            fetch('/api/sendOtp', {
+            fetch('/api/OTP/SendOTP', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

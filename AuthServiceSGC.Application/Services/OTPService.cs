@@ -18,6 +18,8 @@ namespace AuthServiceSGC.Application.Services
 
         // send otp via email, call send EmailService
 
+        // call createToken method, bind it to response body and send it to controller
+
         //call OTPRepository to save the otp
 
 

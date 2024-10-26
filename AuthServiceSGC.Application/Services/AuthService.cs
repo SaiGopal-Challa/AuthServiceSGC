@@ -47,8 +47,16 @@ namespace AuthServiceSGC.Application.Services
                 return new LoginResponseDTO { Success = false, Message = "Invalid username or password." };
             }
 
-            // Generate JWT token
-            var token = TokenUtility.GenerateToken(user);
+            // call CreateSessionId method to create a new sessionId and store it 
+
+            // get logintype from clientid, call a common method to get it
+
+            // if logintype is to send otp, call send otp method, don't generate token
+
+            string token;
+
+            // Generate JWT token if no otp is required
+             token = TokenUtility.GenerateToken(user);
 
             // Return success response with token
             return new LoginResponseDTO

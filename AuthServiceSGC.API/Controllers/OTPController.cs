@@ -8,6 +8,8 @@ namespace AuthServiceSGC.API.Controllers
     [Route("api/[Controller]")]
     public class OTPController : ControllerBase
     {
+        [HttpPost]
+        [Route("SendOTP")]
         public async Task<OTPResponse> SendOTP([FromBody] OTPRequest otpRequest)
         {
             OTPResponse otpResponse = new OTPResponse();

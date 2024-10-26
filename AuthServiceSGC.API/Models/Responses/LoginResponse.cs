@@ -9,8 +9,8 @@ namespace AuthServiceSGC.API.Models.Responses
         public string Message { get; set; }
         public string Token { get; set; } // JWT token (or other session-related token)
 
-        [DefaultValue(1)]
-        public int LoginType { get; set; }
+        
+        public int LoginType { get; set; } = 1;
 
         //[HiddenInput]
         public string? SessionId { get; set; }

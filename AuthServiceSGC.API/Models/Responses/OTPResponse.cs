@@ -5,5 +5,7 @@
         public bool Success { get; set; }
         public string Message { get; set; }
         public string? SessionID { get; set; } = null;
+
+        public string? Token { get; set; }
     }
 }
