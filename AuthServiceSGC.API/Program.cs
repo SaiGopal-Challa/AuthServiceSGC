@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
+using AuthServiceSGC.Infrastructure.Services;
 
 namespace AuthServiceSGC.API
 {
@@ -58,6 +59,7 @@ namespace AuthServiceSGC.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
 
             // Swagger

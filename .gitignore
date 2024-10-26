@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /AuthServiceSGC.API/App_Data/RedisUserDataReplica.json
 /AuthServiceSGC.API/App_Data/*
 /AuthServiceSGC.API/App_Data/Users.json
+/AuthServiceSGC.API/App_Data/Sessions.json

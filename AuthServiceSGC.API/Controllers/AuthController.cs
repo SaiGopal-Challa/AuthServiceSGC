@@ -42,7 +42,7 @@ namespace AuthServiceSGC.API.Controllers
                 if (!result.Success)
                     return BadRequest(new LoginResponse { Message = result.Message, Success = false });
 
-                return Ok(new LoginResponse { Message = "Login successful.", Success = true, Token = result.Token, LoginType = result.LoginType, SessionId = result.SessionId });
+                return Ok(new LoginResponse { Message = "Login successful.", Success = true, Token = result.Token, LoginType = 1, SessionId = result.SessionId });
             }
             catch (Exception ex)
             {

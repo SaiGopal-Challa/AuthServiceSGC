@@ -11,8 +11,9 @@ namespace AuthServiceSGC.Domain.Utilities
     {
         private const string SecretKey = "YourSecretKeyForJwtTokenfortokenfortokenbanana"; //need to move this to config
 
-        public static string GenerateToken(User user)
+        public static string GenerateToken(string Username, int? SessionId )
         {
+            if(SessionId == null) { SessionId = 1; }
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -21,7 +22,8 @@ namespace AuthServiceSGC.Domain.Utilities
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
-                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Name, Username),
+                    new Claim(ClaimTypes.SerialNumber, SessionId.ToString()),
                     // Additional claims can be added here
                 }),
                     Expires = DateTime.UtcNow.AddHours(2),

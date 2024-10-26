@@ -5,6 +5,6 @@
 
         public string Username { get; set; }
 
-        public string? SessionID { get; set; }
+        public int? SessionID { get; set; }
     }
 }

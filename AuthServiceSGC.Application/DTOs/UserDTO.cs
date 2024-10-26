@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Application.DTOs
 {
-    internal class UserDTO
+    public class UserDTO
     {
     }
 }

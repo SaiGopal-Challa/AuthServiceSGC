@@ -103,5 +103,20 @@ namespace AuthServiceSGC.Infrastructure.Repositories
                 File.WriteAllText(_jsonFilePath, "[]"); // Initialize with empty array
             }
         }
+
+
+        //get Email and PhoneNumber from JSON
+        public async Task<(string Email, string PhoneNumber)> GetUserContactFromJsonAsync(string username)
+        {
+            var user = await GetUserFromJsonAsync(username);
+            return (user?.Email, user?.PhoneNumber);
+        }
+
+        // get Email and PhoneNumber from PostgreSQL
+        public async Task<(string Email, string PhoneNumber)> GetUserContactFromPostgresAsync(string username)
+        {
+            var user = await GetUserFromPostgresAsync(username);
+            return (user?.Email, user?.PhoneNumber);
+        }
     }
 }

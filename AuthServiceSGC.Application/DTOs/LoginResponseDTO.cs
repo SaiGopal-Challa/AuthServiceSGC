@@ -14,8 +14,8 @@ namespace AuthServiceSGC.Application.DTOs
         public string Token { get; set; }  // JWT Token or Session Token
 
         [DefaultValue(1)]
-        public int LoginType { get; set; }
+        public int? LoginType { get; set; }
 
-        public string? SessionId { get; set; }
+        public int? SessionId { get; set; }
     }
 }

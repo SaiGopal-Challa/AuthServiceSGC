@@ -27,8 +27,8 @@
                 <input id="email" name="email" type="email" placeholder="Enter your email" class="form-control" required />
             </div>
             <div class="form-group">
-                <label for="phoneNumber">Phone Number</label>
-                <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" class="form-control" required />
+                <label for="phoneNumber">Phone Number (optional)</label>
+                <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
@@ -45,7 +45,7 @@
                 username: document.getElementById("username").value,
                 password: document.getElementById("password").value,
                 email: document.getElementById("email").value,
-                phoneNumber: document.getElementById("phoneNumber").value
+                phoneNumber: document.getElementById("phoneNumber").value || null // Allow for null if empty
             };
 
             try {

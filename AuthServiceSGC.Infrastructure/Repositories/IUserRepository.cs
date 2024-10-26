@@ -13,5 +13,8 @@ namespace AuthServiceSGC.Infrastructure.Repositories
       
         Task<User> GetUserFromJsonAsync(string username);     // JSON
         Task<User> GetUserFromPostgresAsync(string username); // PostgreSQL
+
+        public Task<(string Email, string PhoneNumber)> GetUserContactFromJsonAsync(string username);
+        public Task<(string Email, string PhoneNumber)> GetUserContactFromPostgresAsync(string username);
     }
 }

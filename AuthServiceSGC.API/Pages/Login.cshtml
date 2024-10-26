@@ -25,7 +25,7 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required />
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" id="loginButton">Login</button>
         </form>
 
         <div id="otpSection" style="display:none;">
@@ -33,15 +33,18 @@
             <div class="form-group">
                 <label for="otp">OTP</label>
                 <input type="text" id="otp" name="otp" />
+                <small id="otpStatus"></small>
             </div>
-            <button id="sendOtpButton" onclick="sendOtp()">Send OTP</button>
-            <button id="resendOtpButton" style="display:none;" disabled>Resend OTP</button>
+            <button id="resendOtpButton" onclick="sendOtp()" style="display:none;" disabled>Resend OTP</button>
         </div>
     </div>
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", async function (event) {
             event.preventDefault();
+            const loginButton = document.getElementById("loginButton");
+            loginButton.disabled = true;
+
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
@@ -59,7 +62,10 @@
                 if (response.ok) {
                     if (result.loginType === 1) {
                         document.getElementById('otpSection').style.display = 'block';
-                        startOtpTimer();
+                        document.getElementById('otpStatus').textContent = 'OTP being sent...';
+
+                        // Automatically send OTP
+                        await sendOtp(true);
                     } else {
                         alert('Login successful, no OTP required.');
                     }
@@ -69,40 +75,72 @@
             } catch (error) {
                 console.error('Login failed:', error);
                 alert('Login failed: ' + error.message);
+            } finally {
+                setTimeout(() => { loginButton.disabled = false; }, 10000);
             }
         });
 
-        function sendOtp() {
+        async function sendOtp(auto = false) {
             const username = document.getElementById('username').value;
+            const otpStatus = document.getElementById('otpStatus');
+            otpStatus.textContent = 'OTP being sent...';
 
-            fetch('/api/OTP/SendOTP', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error sending OTP.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    alert('OTP sent successfully!');
-                })
-                .catch(error => {
-                    alert('Error: ' + error.message);
+            try {
+                const response = await fetch('/api/OTP/SendOTP', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
                 });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    if (response.status === 500) {
+                        otpStatus.textContent = 'Error: An internal server error occurred.';
+                        return; // Stop further processing
+                    } else {
+                        handleOtpFailure(result);
+                        return;
+                    }
+                }
+
+                otpStatus.textContent = 'OTP sent successfully!';
+                document.getElementById('resendOtpButton').style.display = 'inline-block';
+                startOtpTimer();
+            } catch (error) {
+                otpStatus.textContent = 'Error: ' + error.message;
+                alert('Error sending OTP: ' + error.message);
+            }
+        }
+
+        function handleOtpFailure(result) {
+            const otpStatus = document.getElementById('otpStatus');
+            otpStatus.textContent = 'Error: ' + result.message;
+            const username = document.getElementById('username').value;
+            const emailPart = username.slice(0, 3) + '...' + username.slice(-3);
+            const updateEmail = confirm(`Sending OTP to ${emailPart} failed. Do you want to update your email?`);
+
+            if (updateEmail) {
+                // Redirect to update email page (replace with your actual URL)
+                window.location.href = '/UpdateAccount';
+            } else {
+                // Allow resend after 45 seconds
+                setTimeout(() => {
+                    document.getElementById('resendOtpButton').style.display = 'inline-block';
+                    document.getElementById('resendOtpButton').disabled = false;
+                }, 45000);
+            }
         }
 
         function startOtpTimer() {
-            let countdown = 60;
+            let countdown = 45;
             const resendOtpButton = document.getElementById('resendOtpButton');
-            resendOtpButton.style.display = 'inline-block';
             resendOtpButton.disabled = true;
 
             const interval = setInterval(() => {
+                resendOtpButton.textContent = `Resend OTP (${countdown}s)`;
                 countdown--;
                 if (countdown <= 0) {
                     clearInterval(interval);
@@ -114,3 +152,208 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @page
+@using AuthServiceSGC.API.Pages
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" id="loginButton">Login</button>
+        </form>
+
+        <div id="otpSection" style="display:none;">
+            <h3>Enter OTP</h3>
+            <div class="form-group">
+                <label for="otp">OTP</label>
+                <input type="text" id="otp" name="otp" />
+                <small id="otpStatus"></small>
+            </div>
+            <button id="resendOtpButton" onclick="sendOtp()" style="display:none;" disabled>Resend OTP</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const loginButton = document.getElementById("loginButton");
+            loginButton.disabled = true;
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch('api/Auth/Login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.loginType === 1) {
+                        document.getElementById('otpSection').style.display = 'block';
+                        document.getElementById('otpStatus').textContent = 'OTP being sent...';
+
+                        // Automatically send OTP
+                        await sendOtp(true);
+                    } else {
+                        alert('Login successful, no OTP required.');
+                    }
+                } else {
+                    throw new Error(result.message || 'Invalid username or password.');
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+                alert('Login failed: ' + error.message);
+            } finally {
+                setTimeout(() => { loginButton.disabled = false; }, 10000);
+            }
+        });
+
+        async function sendOtp(auto = false) {
+            const username = document.getElementById('username').value;
+            const otpStatus = document.getElementById('otpStatus');
+            otpStatus.textContent = 'OTP being sent...';
+
+            try {
+                const response = await fetch('/api/OTP/SendOTP', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                });
+
+                if (!response.ok) throw new Error('Error sending OTP.');
+
+                otpStatus.textContent = 'OTP sent successfully!';
+                document.getElementById('resendOtpButton').style.display = 'inline-block';
+                startOtpTimer();
+            } catch (error) {
+                otpStatus.textContent = 'Error: ' + error.message;
+                alert('Error sending OTP: ' + error.message);
+            }
+        }
+
+        function startOtpTimer() {
+            let countdown = 45;
+            const resendOtpButton = document.getElementById('resendOtpButton');
+            resendOtpButton.disabled = true;
+
+            const interval = setInterval(() => {
+                resendOtpButton.textContent = `Resend OTP (${countdown}s)`;
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    resendOtpButton.disabled = false;
+                    resendOtpButton.textContent = 'Resend OTP';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+ *@
