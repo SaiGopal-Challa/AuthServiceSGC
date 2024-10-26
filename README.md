@@ -26,4 +26,4 @@ Using JWT to provide token, and also using same to provide session details.
 Using Redis to faster validations ( @conditions ). 
 Using Custom built RateLimiting to control traffic .
 
-Built using: .Net Core, PostgreSQL, Redis, Bootstrap
+Built using: .Net Core, Razor Pages, PostgreSQL, Redis, Bootstrap
