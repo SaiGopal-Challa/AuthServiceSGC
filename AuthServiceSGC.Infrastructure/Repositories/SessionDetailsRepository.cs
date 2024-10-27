@@ -74,7 +74,7 @@ namespace AuthServiceSGC.Infrastructure.Repositories
                 if (result == null)
                     return null;
 
-                var sessions = JsonConvert.DeserializeObject<List<SessionDetail>>(result.Sessions);
+                var sessions = JsonConvert.DeserializeObject<List<SessionsDetail>>(result.Sessions);
                 return new SessionAndOTPModel(result.Username)
                 {
                     SessionCount = result.SessionCount,

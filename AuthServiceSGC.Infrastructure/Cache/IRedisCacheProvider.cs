@@ -16,5 +16,7 @@ namespace AuthServiceSGC.Infrastructure.Cache
 
         Task<User> GetUserFromRedisAsync(string username);
 
+
+        public Task AddSessionAndOTPAsyncJson(SessionAndOTPModel sessionAndOtp);
     }
 }

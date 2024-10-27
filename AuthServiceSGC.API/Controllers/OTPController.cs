@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AuthServiceSGC.API.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Route("api/OTP")]
     public class OTPController : ControllerBase
     {
         private readonly IOTPService _otpService;
@@ -48,7 +48,7 @@ namespace AuthServiceSGC.API.Controllers
 
         [HttpPost]
         [Route("SendOTP")]
-        public async Task<IActionResult> SendOTP([FromBody] OTPRequest otpRequest)
+        public async Task<ActionResult<OTPResponse>> SendOTP([FromBody] OTPRequest otpRequest)
         {
             OTPResponse otpResponse = new OTPResponse();
             try

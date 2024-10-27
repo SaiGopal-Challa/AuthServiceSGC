@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuthServiceSGC.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Infrastructure.Repositories
 {
-    public class ISessionDetailsRepository
+    public interface ISessionDetailsRepository
     {
+        public Task SaveSessionAndOTPJsonAsync(SessionAndOTPModel sessionAndOtp);
+
+        public Task<SessionAndOTPModel> GetSessionAndOTPFromJsonAsync(string username);
     }
 }

@@ -10,7 +10,7 @@ namespace AuthServiceSGC.Domain.Entities
     {
         public string Username { get; set; }
         public int SessionCount { get; set; }
-        public List<SessionDetail> Sessions { get; set; } = new List<SessionDetail>();
+        public List<SessionsDetail> Sessions { get; set; } = new List<SessionsDetail>();
 
         public SessionAndOTPModel(string username)
         {
@@ -18,12 +18,12 @@ namespace AuthServiceSGC.Domain.Entities
             SessionCount = 0; // Initialize session count
         }
     }
-    public class SessionDetail
+    public class SessionsDetail
     {
-        public int SessionId { get; set; }
-        public string OTP { get; set; }
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
-        public DateTime Expiry { get; set; }
+        public int? SessionId { get; set; }
+        public string? OTP { get; set; }
+        public string? Token { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime? Expiry { get; set; }
     }
 }

@@ -58,8 +58,11 @@ namespace AuthServiceSGC.API
             // Add application services and repositories
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IOTPService, OTPService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<ISessionDetailsRepository, SessionDetailsRepository>();
+
 
 
             // Swagger
