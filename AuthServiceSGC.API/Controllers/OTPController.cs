@@ -60,6 +60,7 @@ namespace AuthServiceSGC.API.Controllers
 
                 otpResponse.Success = result.Success;
                 otpResponse.Message = result.Message;
+                otpResponse.Token = result.Token;
 
                 return Ok(otpResponse);
             }

@@ -22,6 +22,8 @@ namespace AuthServiceSGC.Application.Services
         public async Task<LoginResponseDTO> LoginUserAsync(LoginDTO loginDTO)
         {
             User user = new User();
+            var clientIdConverter = new ConvertClientIDToLoginType();
+
             // First, check if user exists in Redis replica (if using Redis for caching)
             //var user = await _redisCacheService.GetUserFromRedisAsync(loginDTO.Username);
             if (user == null)
@@ -50,7 +52,7 @@ namespace AuthServiceSGC.Application.Services
             // call CreateSessionId method to create a new sessionId and store it 
             int SessionId = CreateSessionId.GetNewSessionId();
             // get logintype from clientid, call a common method to get it
-            int LoginType = 1;
+            int LoginType = await clientIdConverter.GetLoginType(loginDTO.ClientID, loginDTO.Username);
             // if logintype is to send otp, don't generate token
             if (LoginType == 1)
             {
@@ -64,6 +66,7 @@ namespace AuthServiceSGC.Application.Services
                 };
             }
 
+            LoginType = 0;
             string token;
 
             // Generate JWT token if no otp is required

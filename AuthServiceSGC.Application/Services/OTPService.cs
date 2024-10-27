@@ -35,10 +35,10 @@ namespace AuthServiceSGC.Application.Services
                 //send otp via email,
 
             }
-            
 
+            //call SessionDetailsRepository to save the sessiondetails
 
-            //call OTPRepository to save the otp
+            // call redisCacheService to save the sessiondetails
 
 
             return oTPResponseDTO;
@@ -57,11 +57,15 @@ namespace AuthServiceSGC.Application.Services
         public async Task<OTPResponseDTO> ValidateOTP(OTPValidateRequestDTO oTPValidateRequestDTO)
         {
             OTPResponseDTO oTPResponseDTO = new OTPResponseDTO();
-            // call OTPRepository to validate the otp
+            // call SessionDetailsRepository to validate the otp
 
 
             // Generate JWT token
             string token = TokenUtility.GenerateToken(oTPValidateRequestDTO.Username, oTPValidateRequestDTO.SessionId);
+
+            //call SessionDetailsRepository to save the sessiondetails
+
+            // call redisCacheService to save the sessiondetails
 
             return oTPResponseDTO;
         }
