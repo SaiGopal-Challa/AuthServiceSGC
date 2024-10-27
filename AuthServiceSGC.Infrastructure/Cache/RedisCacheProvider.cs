@@ -11,6 +11,7 @@ namespace AuthServiceSGC.Infrastructure.Cache
     {
         private readonly IDatabase _redisDb;
         private readonly string _userReplicaFilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "RedisUserDataReplica.json");
+        private readonly string _sessionReplicaFilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "RedisSessionReplica.json");
 
         public RedisCacheProvider(IConnectionMultiplexer redis)
         {
@@ -19,6 +20,10 @@ namespace AuthServiceSGC.Infrastructure.Cache
             if (!File.Exists(_userReplicaFilePath))
             {
                 File.WriteAllText(_userReplicaFilePath, "[]"); // Initialize with empty array
+            }
+            if (!File.Exists(_sessionReplicaFilePath))
+            {
+                File.WriteAllText(_sessionReplicaFilePath, "[]"); // Initialize with empty array
             }
         }
 
@@ -90,6 +95,53 @@ namespace AuthServiceSGC.Infrastructure.Cache
             return JsonConvert.DeserializeObject<User>(user);
         }
 
+
+        // Add SessionAndOTPModel details in redisjson
+        public async Task AddSessionAndOTPAsyncJson(SessionAndOTPModel sessionAndOtp)
+        {
+            var sessionData = await GetReplicaSessionsAsync();
+            sessionData.Add(sessionAndOtp);
+
+            using (StreamWriter writer = new StreamWriter(_sessionReplicaFilePath, false))
+            {
+                string updatedJson = JsonConvert.SerializeObject(sessionData, Newtonsoft.Json.Formatting.Indented);
+                await writer.WriteAsync(updatedJson);
+            }
+        }
+
+        // Add SessionAndOTPModel details in Redis
+        public async Task AddSessionAndOTPAsyncRedis(string key, SessionAndOTPModel sessionAndOtp)
+        {
+            var jsonData = JsonConvert.SerializeObject(sessionAndOtp);
+            await _redisDb.StringSetAsync(key, jsonData, expiry: TimeSpan.FromMinutes(30));
+        }
+
+        // Retrieve SessionAndOTPModel details from JSON
+        public async Task<SessionAndOTPModel> GetSessionAndOTPAsyncJson(string username)
+        {
+            var sessionData = await GetReplicaSessionsAsync();
+            return sessionData.FirstOrDefault(s => s.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Retrieve SessionAndOTPModel details from Redis
+        public async Task<SessionAndOTPModel> GetSessionAndOTPAsyncRedis(string key)
+        {
+            var sessionData = await _redisDb.StringGetAsync(key);
+            if (!sessionData.HasValue)
+                return null;
+
+            return JsonConvert.DeserializeObject<SessionAndOTPModel>(sessionData);
+        }
+
+        // Helper method to read SessionAndOTPModel list from JSON file
+        private async Task<List<SessionAndOTPModel>> GetReplicaSessionsAsync()
+        {
+            using (StreamReader reader = new StreamReader(_sessionReplicaFilePath))
+            {
+                string json = await reader.ReadToEndAsync();
+                return JsonConvert.DeserializeObject<List<SessionAndOTPModel>>(json) ?? new List<SessionAndOTPModel>();
+            }
+        }
     }
 }
 

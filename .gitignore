@@ -369,3 +369,4 @@ FodyWeavers.xsd
 /AuthServiceSGC.API/appsettings.json
 /AuthServiceSGC.API/appsettings.Development.json
 /AuthServiceSGC.API/appsettings.Production.json
+/AuthServiceSGC.API/App_Data/RedisSessionReplica.json

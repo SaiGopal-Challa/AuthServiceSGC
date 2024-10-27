@@ -48,7 +48,7 @@ namespace AuthServiceSGC.Application.Services
             }
 
             // call CreateSessionId method to create a new sessionId and store it 
-            int SessionId = 1234;
+            int SessionId = CreateSessionId.GetNewSessionId();
             // get logintype from clientid, call a common method to get it
             int LoginType = 1;
             // if logintype is to send otp, don't generate token
@@ -63,13 +63,14 @@ namespace AuthServiceSGC.Application.Services
                     Token = null
                 };
             }
+
             string token;
 
             // Generate JWT token if no otp is required
              token = TokenUtility.GenerateToken(user.Username, SessionId);
 
-            // save the token using tokenrepository along with other details , model SessionAndOTPDTO
-
+            // save the token using tokenrepository along with other details also store sessionId , model SessionAndOTPDTO
+            
             // Return success response with token
             return new LoginResponseDTO
             {

@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Infrastructure.Repositories
 {
-    public class OTPRepository
+    public class ISessionDetailsRepository
     {
-        // save latest otp into redis
-
-        // save latest otp into pgsql db
-
-        // save latest otp into json file , current placeholder
     }
 }
