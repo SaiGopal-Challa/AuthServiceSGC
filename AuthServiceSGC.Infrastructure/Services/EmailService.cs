@@ -22,7 +22,6 @@ namespace AuthServiceSGC.Infrastructure.Services
         {
             EmailResponseDTO emailResponseDTO = new EmailResponseDTO();
 
-            // **Highlight: Validate the recipient email address**
             if (string.IsNullOrWhiteSpace(toEmail))
             {
                 emailResponseDTO.Status = "The recipient email address cannot be null or empty.";
@@ -30,7 +29,7 @@ namespace AuthServiceSGC.Infrastructure.Services
                 return emailResponseDTO;
             }
 
-            // **Highlight: Retrieve SMTP configuration**
+            // added passkey
             var smtpHost = _configuration["EmailSettings:SMTPHost"];
             var smtpPort = int.Parse(_configuration["EmailSettings:SMTPPort"]);
             var smtpUsername = _configuration["EmailSettings:SMTPUsername"];
@@ -38,7 +37,6 @@ namespace AuthServiceSGC.Infrastructure.Services
             var senderEmail = _configuration["EmailSettings:SenderEmail"];
             var senderName = _configuration["EmailSettings:SenderName"];
 
-            // **Highlight: Validate SMTP settings**
             if (string.IsNullOrWhiteSpace(smtpHost) || smtpPort <= 0 || string.IsNullOrWhiteSpace(smtpUsername) || string.IsNullOrWhiteSpace(smtpPassword))
             {
                 emailResponseDTO.Status = "SMTP configuration is invalid.";
@@ -59,7 +57,7 @@ namespace AuthServiceSGC.Infrastructure.Services
             using var client = new SmtpClient(smtpHost, smtpPort)
             {
                 Credentials = new NetworkCredential(smtpUsername, smtpPassword),
-                EnableSsl = true // **Highlight: Ensure SSL is enabled**
+                EnableSsl = true 
             };
 
             try
@@ -70,7 +68,6 @@ namespace AuthServiceSGC.Infrastructure.Services
             }
             catch (SmtpException smtpEx)
             {
-                // **Highlight: Enhanced exception handling for SMTP errors**
                 Console.WriteLine($"SMTP Error: {smtpEx.StatusCode} - {smtpEx.Message}");
                 emailResponseDTO.Status = "Error sending OTP email. Please check your SMTP configuration.";
             }
