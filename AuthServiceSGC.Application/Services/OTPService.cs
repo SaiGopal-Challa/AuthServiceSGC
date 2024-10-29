@@ -109,7 +109,7 @@ namespace AuthServiceSGC.Application.Services
         //  call send EmailService , SendOtpEmailAsync(string toEmail, string otp)
         public async Task SendOTPEmail(string Username, string OTP)
         {
-             (string EmailId, string MobileNumber) = await _userRepository.GetUserContactFromJsonAsync(Username);
+            (string EmailId, string MobileNumber) = await _userRepository.GetUserContactFromJsonAsync(Username);
 
             EmailResponseDTO emailResponseDTO = await _emailService.SendOtpEmailAsync(EmailId, OTP);
         }
