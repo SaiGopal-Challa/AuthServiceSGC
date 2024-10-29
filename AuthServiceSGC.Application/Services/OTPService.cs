@@ -144,7 +144,11 @@ namespace AuthServiceSGC.Application.Services
                         // Update session details with the new token and reset OTP
                         sessionDetail.Token = token;
                         sessionDetail.OTP = null;
-
+                        /*
+                        
+                            session is not being stored properly, multiple entries into json
+                        
+                        */
                         // Save updated session details in both JSON storage and Redis cache
                         await _sessionDetailsRepository.SaveSessionAndOTPJsonAsync(sessionAndOtpModel);
                         await _redisCacheProvider.AddSessionAndOTPAsyncJson(sessionAndOtpModel);
