@@ -93,7 +93,10 @@ namespace AuthServiceSGC.Application.Services
                 };
             }
 
-            // Save updated session details in JSON and cache
+            // Save updated session details in JSON and cache 
+
+            // #### ***** these below methods are not working as expected
+
             await _sessionDetailsRepository.SaveSessionAndOTPJsonAsync(existingSession);
             await _redisCacheProvider.AddSessionAndOTPAsyncJson(existingSession);
 
