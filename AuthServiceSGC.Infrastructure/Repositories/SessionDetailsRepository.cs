@@ -5,13 +5,13 @@ using Newtonsoft.Json;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Infrastructure.Repositories
 {
-    public class SessionDetailsRepository: ISessionDetailsRepository
+    public class SessionDetailsRepository : ISessionDetailsRepository
     {
         private readonly string _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "Sessions.json");
         private readonly string _postgresConnectionString;
@@ -22,24 +22,39 @@ namespace AuthServiceSGC.Infrastructure.Repositories
             EnsureJsonFileExists();
         }
 
-        // Save SessionAndOTPModel details in JSON
+        // Save or Update SessionAndOTPModel details in JSON
         public async Task SaveSessionAndOTPJsonAsync(SessionAndOTPModel sessionAndOtp)
         {
             var sessions = await GetAllSessionsFromJsonAsync();
-            sessions.Add(sessionAndOtp);
+            var existingSession = sessions.FirstOrDefault(s => s.Username == sessionAndOtp.Username);
+
+            if (existingSession != null)
+            {
+                // Update the existing session details
+                existingSession.SessionCount = sessionAndOtp.SessionCount;
+                existingSession.Sessions = sessionAndOtp.Sessions;
+            }
+            else
+            {
+                // Add as a new session entry if none exists
+                sessions.Add(sessionAndOtp);
+            }
 
             var jsonData = JsonConvert.SerializeObject(sessions, Formatting.Indented);
             await File.WriteAllTextAsync(_jsonFilePath, jsonData);
         }
 
-        // Save SessionAndOTPModel details in PostgreSQL
+        // Save or Update SessionAndOTPModel details in PostgreSQL
         public async Task SaveSessionAndOTPPgSqlAsync(SessionAndOTPModel sessionAndOtp)
         {
             using (var connection = new NpgsqlConnection(_postgresConnectionString))
             {
-                string insertQuery = @"
+                string insertOrUpdateQuery = @"
                     INSERT INTO SessionAndOTPTable (Username, SessionCount, Sessions)
-                    VALUES (@Username, @SessionCount, @Sessions)";
+                    VALUES (@Username, @SessionCount, @Sessions)
+                    ON CONFLICT (Username) DO UPDATE 
+                    SET SessionCount = @SessionCount, 
+                        Sessions = @Sessions;";
 
                 var parameters = new
                 {
@@ -48,7 +63,7 @@ namespace AuthServiceSGC.Infrastructure.Repositories
                     Sessions = JsonConvert.SerializeObject(sessionAndOtp.Sessions) // Store as JSON
                 };
 
-                await connection.ExecuteAsync(insertQuery, parameters);
+                await connection.ExecuteAsync(insertOrUpdateQuery, parameters);
             }
         }
 
