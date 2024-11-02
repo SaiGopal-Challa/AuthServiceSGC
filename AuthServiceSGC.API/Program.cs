@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using AuthServiceSGC.Infrastructure.Services;
+using AuthServiceSGC.Domain.Constants;
 
 namespace AuthServiceSGC.API
 {
@@ -29,6 +30,10 @@ namespace AuthServiceSGC.API
 
             // Add Redis configuration
             var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+
+            var jwtSecretKey = builder.Configuration.GetValue<string>("JwtSecretKey");
+            AppsettingData.JWTSecretKey = jwtSecretKey;
+
             //builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
             builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
             {

@@ -9,4 +9,9 @@ namespace AuthServiceSGC.Domain.Constants
     internal class CommonConstants
     {
     }
+
+    public class AppsettingData
+    {
+        public static string JWTSecretKey { get; set; }
+    }
 }

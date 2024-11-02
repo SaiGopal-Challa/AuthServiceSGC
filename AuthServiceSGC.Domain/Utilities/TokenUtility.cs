@@ -4,12 +4,15 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using AuthServiceSGC.Domain.Entities;
+using System.Configuration;
+using AuthServiceSGC.Domain.Constants;
 
 namespace AuthServiceSGC.Domain.Utilities
 {
     public static class TokenUtility
     {
-        private const string SecretKey = "YourSecretKeyForJwtTokenfortokenfortokenbanana"; //need to move this to config
+
+        private static string SecretKey = AppsettingData.JWTSecretKey;
 
         public static string GenerateToken(string Username, int? SessionId )
         {
