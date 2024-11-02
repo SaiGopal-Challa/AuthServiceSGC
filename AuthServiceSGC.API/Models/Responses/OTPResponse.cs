@@ -4,7 +4,7 @@
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-        public int? SessionID { get; set; } = null;
+        public int? SessionID { get; set; }
 
         public string? Token { get; set; }
     }

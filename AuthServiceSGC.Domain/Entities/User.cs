@@ -15,7 +15,7 @@ namespace AuthServiceSGC.Domain.Entities
         public string? PhoneNumber { get; set; }
 
         [DefaultValue(1)]
-        public int LoginType  { get; set; }
+        public int? LoginType  { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
