@@ -25,6 +25,8 @@ namespace AuthServiceSGC.API
             // Enable Razor Pages
             builder.Services.AddRazorPages();
 
+            builder.Services.AddSession();
+
             // Add Redis configuration
             var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
             //builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
@@ -88,6 +90,7 @@ namespace AuthServiceSGC.API
 
             app.MapControllers();
             app.MapRazorPages();
+            app.UseSession();
             //if (app.Environment.IsEnvironment("UI"))
             //{
             //    app.MapRazorPages();  // Only map Razor Pages for UI profile

@@ -1,0 +1,127 @@
+﻿@page
+@using AuthServiceSGC.API.Pages
+@model UpdateYourAccountPageModel
+@{
+    ViewData["Title"] = "Update Your Account";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/updateAccount.css" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="update-account-container">
+        <h1>Update Your Account</h1>
+        <form id="updateAccountForm" onsubmit="return handleUpdateAccount(event);">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" value="" readonly />
+            </div>
+            <div class="form-group">
+                <label for="existingPassword">Existing Password:</label>
+                <input type="password" id="existingPassword" required />
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" />
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm New Password:</label>
+                <input type="password" id="confirmPassword" />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="updateEmailCheckbox" onclick="toggleEmailField()" />
+                <label for="email">Email:</label>
+                <input type="email" id="email" disabled />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="updateMobileCheckbox" onclick="toggleMobileField()" />
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobile" disabled />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="updatePreferredNameCheckbox" onclick="togglePreferredNameField()" />
+                <label for="preferredName">Preferred Name:</label>
+                <input type="text" id="preferredName" disabled />
+            </div>
+            <button type="submit">Update Account</button>
+        </form>
+    </div>
+
+    <script>
+        // Retrieve session parameters from sessionStorage
+        let sessionId = sessionStorage.getItem('sessionId');
+        let token = sessionStorage.getItem('token');
+        let username = sessionStorage.getItem('username');
+
+        // Populate the username
+        document.getElementById('username').value = username;
+
+        // Toggle functions for enabling/disabling input fields
+        function toggleEmailField() {
+            document.getElementById('email').disabled = !document.getElementById('updateEmailCheckbox').checked;
+        }
+
+        function toggleMobileField() {
+            document.getElementById('mobile').disabled = !document.getElementById('updateMobileCheckbox').checked;
+        }
+
+        function togglePreferredNameField() {
+            document.getElementById('preferredName').disabled = !document.getElementById('updatePreferredNameCheckbox').checked;
+        }
+
+        // Handle account update submission
+        function handleUpdateAccount(event) {
+            event.preventDefault();
+
+            const existingPassword = document.getElementById('existingPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('email').value;
+            const mobile = document.getElementById('mobile').value;
+            const preferredName = document.getElementById('preferredName').value;
+
+            // Basic validation for new password
+            if (newPassword !== confirmPassword) {
+                alert("New password and confirmation do not match.");
+                return;
+            }
+
+            // Prepare the data to send
+            const updateData = {
+                username: username,
+                sessionId: sessionId,
+                token: token,
+                existingPassword: existingPassword,
+                newPassword: newPassword,
+                email: email || null,
+                mobile: mobile || null,
+                preferredName: preferredName || null
+            };
+
+            // Call the update account API
+            fetch('/api/UpdateAccount/UpdateAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include token for validation
+                },
+                body: JSON.stringify(updateData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Account updated successfully.');
+                } else {
+                    alert('Failed to update account: ' + data.message);
+                }
+            })
+            .catch(err => alert('Update failed: ' + err.message));
+        }
+    </script>
+</body>
+</html>

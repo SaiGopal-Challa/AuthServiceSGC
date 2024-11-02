@@ -1,0 +1,221 @@
+﻿@page
+@using AuthServiceSGC.API.Pages
+@model PostLoginUserPageModel
+@{
+    ViewData["Title"] = "User Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1 id="welcomeMessage">Welcome, User!</h1>
+            <p>Your session is active. Manage your account or refresh your token as needed.</p>
+        </header>
+        <div class="button-container">
+            <button onclick="handleLogout()">Logout</button>
+            <button onclick="handleUpdateAccount()">Update Account</button>
+            <button onclick="handleRefreshToken()">Refresh Token</button>
+        </div>
+        <div class="token-display" id="tokenDisplay">
+            <h2>Session Token</h2>
+            <p id="tokenText">Your token will appear here when refreshed.</p>
+        </div>
+    </div>
+
+    <script>
+        // Retrieve session parameters from sessionStorage
+        let sessionId = sessionStorage.getItem('sessionId');
+        let token = sessionStorage.getItem('token');
+        let username = sessionStorage.getItem('username');
+
+        // Display the username
+        document.getElementById('welcomeMessage').textContent = `Welcome, ${username || "User"}!`;
+
+        // Display the token if available
+        if (token) {
+            document.getElementById('tokenText').textContent = token;
+        } else {
+            document.getElementById('tokenText').textContent = 'No token available.';
+        }
+
+        // Handle logout
+        function handleLogout() {
+            fetch('/api/Logout/Logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: username, sessionId: sessionId, token: token })
+            })
+                .then(() => {
+                    sessionStorage.clear(); // Clear sessionStorage on logout
+                    //window.location.href = "/"; // Redirect to home
+                })
+                .catch(err => alert('Logout failed: ' + err.message));
+        }
+
+        // Handle account update redirection
+        function handleUpdateAccount() {
+            window.location.href = '/UpdateYourAccount';
+        }
+
+        // Handle token refresh
+        function handleRefreshToken() {
+            fetch('/api/RefreshToken/RefreshToken', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include current token for validation
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        // Update session storage with new token
+                        sessionStorage.setItem('token', data.token);
+                        document.getElementById('tokenText').textContent = data.token;
+                    } else {
+                        alert('Failed to refresh token.');
+                    }
+                })
+                .catch(err => alert('Token refresh failed: ' + err.message));
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+@page
+@using AuthServiceSGC.API.Pages
+@model PostLoginUserPageModel
+@{
+    ViewData["Title"] = "User Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Welcome, @Model.Username ?? "User"!</h1>
+            <p>Your session is active. Manage your account or refresh your token as needed.</p>
+        </header>
+        <div class="button-container">
+            <button onclick="handleLogout()">Logout</button>
+            <button onclick="handleUpdateAccount()">Update Account</button>
+            <button onclick="handleRefreshToken()">Refresh Token</button>
+        </div>
+        <div class="token-display" id="tokenDisplay">
+            <h2>Session Token</h2>
+            <p id="tokenText">Your token will appear here when refreshed.</p>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = null; 
+        let token = null;
+        let username = null;
+        sessionId = sessionStorage.getItem('sessionId');
+        token = sessionStorage.getItem('token');
+        
+        // Handle logout
+        function handleLogout() {
+            fetch('/api/Auth/Logout', { method: 'POST' })
+                //.then(() => window.location.href = "/")
+                .catch(err => alert('Logout failed: ' + err.message));
+        }
+
+        // Handle account update redirection
+        function handleUpdateAccount() {
+            window.location.href = '/UpdateAccount';
+        }
+
+        // Handle token refresh
+        function handleRefreshToken() {
+            fetch('/api/Auth/RefreshToken', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('tokenText').textContent = data.token || 'No token available.';
+                })
+                .catch(err => alert('Token refresh failed: ' + err.message));
+        }
+    </script>
+</body>
+</html>
+*@

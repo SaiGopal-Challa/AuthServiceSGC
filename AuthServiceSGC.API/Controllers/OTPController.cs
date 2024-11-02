@@ -32,6 +32,7 @@ namespace AuthServiceSGC.API.Controllers
 
                 otpResponse.Success = result.Success;
                 otpResponse.Message = result.Message;
+                otpResponse.SessionID = result.SessionID;
                 otpResponse.Token = result.Token;
 
                 return Ok(otpResponse);

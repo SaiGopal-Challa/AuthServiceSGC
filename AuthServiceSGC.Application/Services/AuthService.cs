@@ -66,7 +66,6 @@ namespace AuthServiceSGC.Application.Services
                 };
             }
 
-            LoginType = 0;
             string token;
 
             // Generate JWT token if no otp is required
@@ -79,6 +78,7 @@ namespace AuthServiceSGC.Application.Services
             {
                 Success = true,
                 Message = "Login successful",
+                LoginType = LoginType,
                 Token = token
             };
         }
