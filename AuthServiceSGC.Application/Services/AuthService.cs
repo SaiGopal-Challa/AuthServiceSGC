@@ -82,5 +82,14 @@ namespace AuthServiceSGC.Application.Services
                 Token = token
             };
         }
+
+
+
+        public async Task LogoutUserAsync()
+        {
+            // need to take session id, token, 
+            // also need to add blacklisting service, and put the token there
+
+        }
     }
 }
