@@ -8,6 +8,6 @@ namespace AuthServiceSGC.Infrastructure.Repositories
 {
     public interface ITokenRepository
     {
-        public Task AddTokenToBlacklist(string token);
+        public Task<bool> AddTokenToBlacklist(string token);
     }
 }

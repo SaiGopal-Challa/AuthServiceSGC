@@ -13,9 +13,11 @@ namespace AuthServiceSGC.Infrastructure.Repositories
 
         // here i will add tokenBlacklist service
 
-        public async Task AddTokenToBlacklist(string token)
+        public async Task<bool> AddTokenToBlacklist(string token)
         {
-
+            bool status = false;
+            //write logic to add the token to blacklist
+            return true;
         }
 
 
