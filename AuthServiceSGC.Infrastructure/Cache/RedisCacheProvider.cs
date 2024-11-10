@@ -172,6 +172,22 @@ namespace AuthServiceSGC.Infrastructure.Cache
             }
         }
 
+
+
+        // === Redis Cache-Based Methods ===
+
+        // Method for adding token to Redis Cache (can be commented out when Redis is not in use)
+        public async Task AddToBlacklistCacheAsync(string token)
+        {
+            await _redisDb.StringSetAsync(token, "blacklisted");
+        }
+
+        // Method to check if a token is blacklisted in Redis (can be commented out when Redis is not in use)
+        public async Task<bool> IsBlacklistedInCacheAsync(string token)
+        {
+            var cacheValue = await _redisDb.StringGetAsync(token);
+            return cacheValue == "blacklisted";
+        }
     }
 }
 
