@@ -10,5 +10,7 @@ namespace AuthServiceSGC.Application.Interfaces
     public interface IAuthService
     {
         Task<LoginResponseDTO> LoginUserAsync(LoginDTO loginDto);  // Takes DTO and returns a DTO
+
+        public Task<LogoutResponseDTO> LogoutUserAsync(LogoutRequestDTO logoutRequestDTO);
     }
 }

@@ -85,13 +85,15 @@ namespace AuthServiceSGC.Application.Services
 
 
 
-        public async Task LogoutUserAsync(LogoutRequestDTO logoutRequestDTO)
+        public async Task<LogoutResponseDTO> LogoutUserAsync(LogoutRequestDTO logoutRequestDTO)
         {
             // need to take session id, token, 
+            // remove the json object part that is of this sessionId and token
             // also need to add blacklisting service, and put the token there
 
             //return logoutResponseDTO object with successMessage
 
+            return null;
         }
     }
 }
