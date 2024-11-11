@@ -172,5 +172,8 @@ namespace AuthServiceSGC.Infrastructure.Database.DatabaseExecutor
             }
             return default;
         }
+    
+        // executor => orm ; Make sure DTOs parameter names are same as column names / DB level parameter names (could be view columns etc)
+    
     }
 }
