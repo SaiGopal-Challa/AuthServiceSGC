@@ -23,6 +23,7 @@ More details on services provided:
     OTP on both email and mobile.
 
 Using JWT to provide token, and also using same to provide session details.
+Added BlackListing functionality to black list tokens immediatly post logout.
 Using Redis to faster validations ( @conditions ). 
 Using Custom built RateLimiting to control traffic .
 
