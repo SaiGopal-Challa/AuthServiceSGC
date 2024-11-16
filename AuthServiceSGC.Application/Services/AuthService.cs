@@ -13,12 +13,14 @@ namespace AuthServiceSGC.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IRedisCacheProvider _redisCacheService;
         private readonly ITokenBlacklistService _tokenBlacklistService;
+        private readonly ISessionDetailsRepository _sessionDetailsRepository;
 
-        public AuthService(IUserRepository userRepository, IRedisCacheProvider redisCacheService, ITokenBlacklistService tokenBlacklistService)
+        public AuthService(IUserRepository userRepository, IRedisCacheProvider redisCacheService, ITokenBlacklistService tokenBlacklistService, ISessionDetailsRepository sessionDetailsRepository)
         {
             _userRepository = userRepository;
             _redisCacheService = redisCacheService;
             _tokenBlacklistService = tokenBlacklistService;
+            _sessionDetailsRepository = sessionDetailsRepository;
         }
 
         public async Task<LoginResponseDTO> LoginUserAsync(LoginDTO loginDTO)
@@ -91,7 +93,7 @@ namespace AuthServiceSGC.Application.Services
         {
             // need to take session id, token, call sessiondetailsrepository and rediscacheprovider classes to 
             // remove the json object part that is of this sessionId and token
-
+            //await _sessionDetailsRepository.RemoveSessionAndOTPFromJsonAsync(logoutRequestDTO);
             //  also need to add blacklisting service, and put the token there, call the tokenrepository 
             await _tokenBlacklistService.AddToBlacklistFileAsync(logoutRequestDTO.Token);
             //return logoutResponseDTO object with successMessage

@@ -114,5 +114,11 @@ namespace AuthServiceSGC.Infrastructure.Repositories
             var jsonData = await File.ReadAllTextAsync(_jsonFilePath);
             return JsonConvert.DeserializeObject<List<SessionAndOTPModel>>(jsonData) ?? new List<SessionAndOTPModel>();
         }
+
+
+        private async Task RemoveSessionAndOTPFromJsonAsync(SessionsDetail sessionsDetails)
+        {
+
+        }
     }
 }
