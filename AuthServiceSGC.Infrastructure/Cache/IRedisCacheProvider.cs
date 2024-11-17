@@ -19,7 +19,7 @@ namespace AuthServiceSGC.Infrastructure.Cache
 
         public Task AddSessionAndOTPAsyncJson(SessionAndOTPModel sessionAndOtp);
 
-
+        public Task RemoveSessionAndOtpJsonAsync(int sessionId, string token);
         Task AddToBlacklistCacheAsync(string token);
         Task<bool> IsBlacklistedInCacheAsync(string token);
     }

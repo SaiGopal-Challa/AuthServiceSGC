@@ -88,17 +88,46 @@ namespace AuthServiceSGC.Application.Services
         }
 
 
-
         public async Task<LogoutResponseDTO> LogoutUserAsync(LogoutRequestDTO logoutRequestDTO)
         {
-            // need to take session id, token, call sessiondetailsrepository and rediscacheprovider classes to 
-            // remove the json object part that is of this sessionId and token
-            //await _sessionDetailsRepository.RemoveSessionAndOTPFromJsonAsync(logoutRequestDTO);
-            //  also need to add blacklisting service, and put the token there, call the tokenrepository 
-            await _tokenBlacklistService.AddToBlacklistFileAsync(logoutRequestDTO.Token);
-            //return logoutResponseDTO object with successMessage
+            try
+            {
+                var sessionDetails = new SessionsDetail
+                {
+                    SessionId = logoutRequestDTO.SessionID,
+                    Token = logoutRequestDTO.Token
+                };
 
-            return null;
+                // Remove session details from JSON and database
+                await _sessionDetailsRepository.RemoveSessionAndOTPFromJsonAsync(sessionDetails);
+                // Uncomment when database implementation is ready
+                // await _sessionDetailsRepository.RemoveSessionAndOTPFromPgSqlAsync(sessionDetails);
+
+                // Remove session details from Redis JSON file
+                await _redisCacheService.RemoveSessionAndOtpJsonAsync(logoutRequestDTO.SessionID, logoutRequestDTO.Token);
+
+                // Add token to the blacklist
+                await _tokenBlacklistService.AddToBlacklistFileAsync(logoutRequestDTO.Token);
+
+                // Return success response
+                return new LogoutResponseDTO
+                {
+                    Success = true,
+                    Message = "User successfully logged out."
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // _logger.LogError(ex, "Error during logout operation");
+
+                // Return failure response
+                return new LogoutResponseDTO
+                {
+                    Success = false,
+                    Message = $"Logout failed: {ex.Message}"
+                };
+            }
         }
     }
 }

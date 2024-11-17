@@ -73,8 +73,10 @@ namespace AuthServiceSGC.Application.Services
                 return new ConcurrentDictionary<string, DateTime>();
 
             var jsonData = File.ReadAllText(_blacklistFilePath);
-            return JsonSerializer.Deserialize<ConcurrentDictionary<string, DateTime>>(jsonData)
-                   ?? new ConcurrentDictionary<string, DateTime>();
+
+            // Deserialize to a dictionary first, then convert to a ConcurrentDictionary
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, DateTime>>(jsonData);
+            return new ConcurrentDictionary<string, DateTime>(dictionary ?? new Dictionary<string, DateTime>());
         }
 
         // Method to save blacklist data back to the JSON file (file-based only)

@@ -116,9 +116,79 @@ namespace AuthServiceSGC.Infrastructure.Repositories
         }
 
 
-        private async Task RemoveSessionAndOTPFromJsonAsync(SessionsDetail sessionsDetails)
+        // Remove session from JSON file
+        public async Task RemoveSessionAndOTPFromJsonAsync(SessionsDetail sessionsDetails)
         {
+            var sessions = await GetAllSessionsFromJsonAsync();
 
+            // Find the session to remove based on SessionId and Token
+            var sessionToRemove = sessions.FirstOrDefault(s =>
+                s.Sessions.Any(sd => sd.SessionId == sessionsDetails.SessionId && sd.Token == sessionsDetails.Token));
+
+            if (sessionToRemove != null)
+            {
+                // Remove the session details from the user's sessions
+                sessionToRemove.Sessions.RemoveAll(sd => sd.SessionId == sessionsDetails.SessionId && sd.Token == sessionsDetails.Token);
+
+                // If the user has no more sessions, remove the user entry
+                if (!sessionToRemove.Sessions.Any())
+                {
+                    sessions.Remove(sessionToRemove);
+                }
+
+                // Save the updated sessions back to the JSON file
+                var jsonData = JsonConvert.SerializeObject(sessions, Formatting.Indented);
+                await File.WriteAllTextAsync(_jsonFilePath, jsonData);
+            }
+        }
+
+        // Remove session from PostgreSQL database
+        private async Task RemoveSessionAndOTPFromPgSqlAsync(SessionsDetail sessionsDetails)
+        {
+            using (var connection = new NpgsqlConnection(_postgresConnectionString))
+            {
+                // Retrieve the session data for the user
+                string getSessionQuery = @"
+            SELECT Username, SessionCount, Sessions
+            FROM SessionAndOTPTable
+            WHERE Sessions::jsonb @> @SessionFilter::jsonb";
+
+                var sessionFilter = JsonConvert.SerializeObject(new { SessionId = sessionsDetails.SessionId, Token = sessionsDetails.Token });
+
+                var result = await connection.QueryFirstOrDefaultAsync<dynamic>(getSessionQuery, new { SessionFilter = sessionFilter });
+
+                if (result != null)
+                {
+                    // Deserialize and filter the session list
+                    var sessionList = JsonConvert.DeserializeObject<List<SessionsDetail>>((string)result.Sessions);
+                    _ = sessionList.RemoveAll(sd => sd.SessionId == sessionsDetails.SessionId && sd.Token == sessionsDetails.Token); //since sessionlist can be null, using discard 
+
+                    // Update or remove the user session data
+                    if (sessionList.Any())
+                    {
+                        string updateQuery = @"
+                    UPDATE SessionAndOTPTable
+                    SET SessionCount = @SessionCount,
+                        Sessions = @Sessions
+                    WHERE Username = @Username";
+
+                        await connection.ExecuteAsync(updateQuery, new
+                        {
+                            SessionCount = sessionList.Count,
+                            Sessions = JsonConvert.SerializeObject(sessionList),
+                            Username = (string)result.Username
+                        });
+                    }
+                    else
+                    {
+                        string deleteQuery = @"
+                    DELETE FROM SessionAndOTPTable
+                    WHERE Username = @Username";
+
+                        await connection.ExecuteAsync(deleteQuery, new { Username = (string)result.Username });
+                    }
+                }
+            }
         }
     }
 }

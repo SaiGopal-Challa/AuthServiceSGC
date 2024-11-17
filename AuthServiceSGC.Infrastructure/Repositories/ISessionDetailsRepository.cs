@@ -12,5 +12,7 @@ namespace AuthServiceSGC.Infrastructure.Repositories
         public Task SaveSessionAndOTPJsonAsync(SessionAndOTPModel sessionAndOtp);
 
         public Task<SessionAndOTPModel> GetSessionAndOTPFromJsonAsync(string username);
+
+        public Task RemoveSessionAndOTPFromJsonAsync(SessionsDetail sessionsDetails);
     }
 }

@@ -48,12 +48,12 @@
 
         // Handle logout
         function handleLogout() {
-            fetch('/api/Logout/Logout', {
+            fetch('/api/Logout/LogoutUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: username, sessionId: sessionId, token: token })
+                body: JSON.stringify({ sessionId: sessionId, token: token })
             })
                 .then(() => {
                     sessionStorage.clear(); // Clear sessionStorage on logout

@@ -172,6 +172,78 @@ namespace AuthServiceSGC.Infrastructure.Cache
             }
         }
 
+        public async Task RemoveSessionAndOtpJsonAsync(int sessionId, string token)
+        {
+            // Retrieve the session data from the replica JSON
+            var sessionData = await GetReplicaSessionsAsync();
+
+            // Iterate over each session and filter out matching session IDs and tokens
+            foreach (var session in sessionData.ToList()) // Use ToList() to allow modifications during iteration
+            {
+                var sessionsList = session.Sessions.ToList();
+                sessionsList.RemoveAll(sd => sd.SessionId == sessionId && sd.Token == token);
+
+                if (sessionsList.Any())
+                {
+                    // If any sessions remain, update the session data
+                    session.Sessions = sessionsList;
+                }
+                else
+                {
+                    // Remove the session object completely if no sessions are left
+                    sessionData.Remove(session);
+                }
+            }
+
+            // Write the updated session data back to the JSON file
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(_sessionReplicaFilePath, false))
+                {
+                    string updatedJson = JsonConvert.SerializeObject(sessionData, Newtonsoft.Json.Formatting.Indented);
+                    await writer.WriteAsync(updatedJson);
+                }
+            }
+            catch (IOException ex)
+            {
+                throw new Exception("Failed to update session replica file.", ex);
+            }
+        }
+
+
+
+        public async Task RemoveSessionAndOtpRedisAsync(string redisKey, int sessionId, string token)
+        {
+            try
+            {
+                var sessionData = await _redisDb.StringGetAsync(redisKey);
+
+                if (sessionData.HasValue)
+                {
+                    // Deserialize the session data
+                    var sessionModel = JsonConvert.DeserializeObject<SessionAndOTPModel>(sessionData);
+
+                    // Remove the matching session
+                    sessionModel?.Sessions?.RemoveAll(sd => sd.SessionId == sessionId && sd.Token == token);
+
+                    if (sessionModel?.Sessions?.Any() == true)
+                    {
+                        // If sessions remain, update the Redis cache with the filtered session data
+                        var updatedJson = JsonConvert.SerializeObject(sessionModel);
+                        await _redisDb.StringSetAsync(redisKey, updatedJson, expiry: TimeSpan.FromMinutes(30));
+                    }
+                    else
+                    {
+                        // If no sessions remain, remove the key from Redis
+                        await _redisDb.KeyDeleteAsync(redisKey);
+                    }
+                }
+            }
+            catch (RedisException ex)
+            {
+                throw new Exception($"Failed to interact with Redis for key: {redisKey}", ex);
+            }
+        }
 
 
         // === Redis Cache-Based Methods ===

@@ -69,6 +69,7 @@ namespace AuthServiceSGC.API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<ISessionDetailsRepository, SessionDetailsRepository>();
+            builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 
 
 
