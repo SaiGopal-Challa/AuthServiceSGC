@@ -22,6 +22,8 @@ namespace AuthServiceSGC.Application.Services
             }
             // check if token is valid , if valid, create new token & set success to true
 
+            //save the new token to sessionDetails in json, db & cache
+
             return refreshToken;
         }
     }
