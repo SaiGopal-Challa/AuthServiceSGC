@@ -11,7 +11,6 @@ namespace AuthServiceSGC.Infrastructure.Repositories
 
         // in place of this, i'm using SessionDetailsRepository
 
-        // here i will add tokenBlacklist service
 
         public async Task<bool> AddTokenToBlacklist(string token)
         {

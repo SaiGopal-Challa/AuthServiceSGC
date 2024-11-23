@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AuthServiceSGC.Application.DTOs
 {
-    internal class RefreshTokenDto
+    public class RefreshTokenDto
     {
+        public string OldToken { get; set; }
+        public string NewToken { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace AuthServiceSGC.Application.Services
 {
     public class TokenService : ITokenService
     {
-        
+
     }
 
 }

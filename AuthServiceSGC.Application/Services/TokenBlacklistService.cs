@@ -93,5 +93,10 @@ namespace AuthServiceSGC.Application.Services
             var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
             return jwtToken?.ValidTo;
         }
+
+        public async Task ClearBlackListJsonFile() 
+        {
+            
+        }
     }
 }
