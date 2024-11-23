@@ -62,5 +62,26 @@ namespace AuthServiceSGC.Application.Services
                 Message = "User registered successfully"
             };
         }
+
+
+        public async Task<string> UpdateAccountAsync(UpdateAccountDto updateAccountDto)
+        {
+            string status = string.Empty;
+            // first validate details given, do regex check again from backend,
+            // if user is using a token older than 5 mins, see if he is mfa user, if yes do otp check again, else, do a simple password check ( this should be added later , need to solidify the process)
+            
+            // update the details into db, cache(if present)
+            // ( remove all current sessions except this, i.e delete sessiondetails for any other sessionId for the user)
+            // if update is success, change status to success, else put some failure message in it
+
+            return status;
+        }
+
+        public async Task<string> DeleteAccountAsync(UpdateAccountDto updateAccountDto)
+        {
+            string status = string.Empty;
+
+            return status;
+        }
     }
 }
