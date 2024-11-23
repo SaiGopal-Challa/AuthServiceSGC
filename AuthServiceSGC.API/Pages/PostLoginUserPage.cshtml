@@ -69,12 +69,13 @@
 
         // Handle token refresh
         function handleRefreshToken() {
-            fetch('/api/RefreshToken/RefreshToken', {
+            fetch('/api/RefreshToken/GetNewToken', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Include current token for validation
-                }
+                    //'Authorization': `Bearer ${token}` // Include current token for validation
+                },
+                body: JSON.stringify({ sessionId: sessionId, token: token })
             })
                 .then(response => response.json())
                 .then(data => {

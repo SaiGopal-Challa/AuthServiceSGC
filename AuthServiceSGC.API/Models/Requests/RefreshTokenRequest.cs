@@ -2,5 +2,7 @@
 {
     public class RefreshTokenRequest
     {
+        public string Token { get; set; }
+        public string SessionId { get; set; }
     }
 }
