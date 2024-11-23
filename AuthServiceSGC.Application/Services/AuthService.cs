@@ -97,6 +97,7 @@ namespace AuthServiceSGC.Application.Services
                     SessionId = logoutRequestDTO.SessionID,
                     Token = logoutRequestDTO.Token
                 };
+                //first validate the token, if token is not valid return "wrong session details" message, elif token is valid continue to remove it and blacklist it
 
                 // Remove session details from JSON and database
                 await _sessionDetailsRepository.RemoveSessionAndOTPFromJsonAsync(sessionDetails);
