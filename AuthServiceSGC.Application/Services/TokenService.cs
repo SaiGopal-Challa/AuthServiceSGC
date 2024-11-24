@@ -12,6 +12,10 @@ namespace AuthServiceSGC.Application.Services
 {
     public class TokenService : ITokenService
     {
+        public TokenService() 
+        { 
+        
+        }
         public async Task<RefreshTokenDto> RefreshTokenAsync(RefreshTokenDto refreshToken)
         {
             

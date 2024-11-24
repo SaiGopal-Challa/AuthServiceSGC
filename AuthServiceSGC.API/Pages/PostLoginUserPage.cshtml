@@ -72,7 +72,7 @@
             fetch('/api/RefreshToken/GetNewToken', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                     //'Authorization': `Bearer ${token}` // Include current token for validation
                 },
                 body: JSON.stringify({ sessionId: sessionId, token: token })

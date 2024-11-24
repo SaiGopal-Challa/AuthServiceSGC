@@ -8,11 +8,15 @@ namespace AuthServiceSGC.Application.DTOs
 {
     public class UpdateAccountDto
     {
-        public string Uid { get; set; } // User ID
+        public string Username { get; set; }
 
-        public string Name { get; set; } // User's New Name
+        public string OldPassword { get; set; }
 
-        public string Email { get; set; } // User's New Email
+        public string NewPassword { get; set; }
+
+        public string Email { get; set; }
+        public string MobileNumber { get; set; }
+
     }
 
 }
