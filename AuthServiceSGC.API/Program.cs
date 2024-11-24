@@ -16,6 +16,7 @@ namespace AuthServiceSGC.API
 {
     public class Program
     {
+        // custom ratelimiting middleware is yet to be configured in builder and app
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
