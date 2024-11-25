@@ -24,6 +24,8 @@ More details on services provided:
 
 Using JWT to provide token, and also using same to provide session details.
 Added BlackListing functionality to black list tokens immediatly post logout.
+Also has Update Account, Refresh Token, Delete Account features.
+
 Using Redis to faster validations ( @conditions ). 
 Using Custom built RateLimiting to control traffic .
 
