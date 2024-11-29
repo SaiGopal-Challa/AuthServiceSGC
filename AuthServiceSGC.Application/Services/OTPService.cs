@@ -29,7 +29,7 @@ namespace AuthServiceSGC.Application.Services
             _redisCacheProvider = redisCacheProvider;
         }
 
-        
+        // need to add logging the otp in background non awaited process ( explore streaming queue )
         public async Task<OTPResponseDTO> SendOTP(OTPRequestDTO oTPRequestDTO)
         {
             OTPResponseDTO oTPResponseDTO = new OTPResponseDTO();

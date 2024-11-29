@@ -1,0 +1,26 @@
+
+
+
+Update to current progress
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NEED TO ADD NEXT
+need to add pgsql db and connect to the services.
+need to add redis db and connect to the services.
+
+need to add a background log streaming queue to handle all the logs from all services.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NEED TO MODIFY in near future
+need to modify current OTP handling, to support multiple OTP verifications
+need to update the current sql scripts ( as they are just place holders for now )
+need to centralized all sql scripts in one constant file ( multi-thread safe and efficient ) 
+need to create and call standalone DBExecutor class to handle all the db operations
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NEED TO MODIFY in far
+need to modify 
