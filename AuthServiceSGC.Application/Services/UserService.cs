@@ -69,10 +69,13 @@ namespace AuthServiceSGC.Application.Services
             string status = string.Empty;
             // first validate details given, do regex check again from backend,
             // if user is using a token older than 5 mins, see if he is mfa user, if yes do otp check again, else, do a simple password check ( this should be added later , need to solidify the process)
-            
-            // update the details into db, cache(if present)
+
+            // update the details into cache, db
+            // first update the cache, inside cache update method ( 1st if no data is present it will not update and returns true, but if present and update failed, it will try to delete the entry from cache, if delete also failed then it will return false)
             // ( remove all current sessions except this, i.e delete sessiondetails for any other sessionId for the user)
             // if update is success, change status to success, else put some failure message in it
+
+            // if user is updating password, invalidate all sessions and otps, and send a mail to user about the change
 
             return status;
         }

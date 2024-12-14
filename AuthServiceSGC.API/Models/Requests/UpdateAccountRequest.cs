@@ -2,6 +2,7 @@
 {
     public class UpdateAccountRequest
     {
+
     }
 
     public class DeleteAccountRequest
